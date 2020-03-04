@@ -1,16 +1,11 @@
 ---
 id: 59796f
-name: Image button has accessible name
+name: Image button accessible name is descriptive
 rule_type: atomic
 description: |
-  This rule checks that each image button element has an accessible name.
+  This rule checks that the accessible name of an image button describes its purpose.
 accessibility_requirements:
   wcag20:1.1.1: # Non-Text Content (A)
-    forConformance: true
-    failed: not satisfied
-    passed: further testing needed
-    inapplicable: further testing needed
-  wcag20:4.1.2: # Name, Role, Value (A)
     forConformance: true
     failed: not satisfied
     passed: further testing needed
@@ -30,7 +25,9 @@ input_aspects: # Remove what is not applicable
   - CSS Styling
 acknowledgements:
   authors:
+    - Emma Pratt Richens
     - Anne Thyme Nørregaard
+    - Stein Erik Skotkjerra
 htmlHintIgnore:
   # https://www.npmjs.com/package/htmlhint
   # (used with `npm test` to ensure validity of code snippets)
@@ -41,13 +38,13 @@ htmlHintIgnore:
 
 The rule applies to any HTML `input` element with a `type` attribute in the [`Image Button` state](<https://html.spec.whatwg.org/#image-button-state-(type=image)>), that is [included in the accessibility tree][].
 
+**Note:** `input` elements have a `type` attribute in the `Image button` state if it is set to any case-insensitive match of `image` (most of the time, using `<input type="image">`).
+
 **Note:** The specification of the [`type`](https://html.spec.whatwg.org/#states-of-the-type-attribute) attribute describes in detail how to map the value of the attribute to its corresponding state.
 
 ## Expectation
 
-Each target element has an [accessible name][] that is not empty (`""`).
-
-**Note:** Testing that the [accessible name][] is descriptive is not part of this rule and must be tested separately.
+The [accessible name][] of the target element describes the purpose of that image button.
 
 ## Assumptions
 
@@ -60,8 +57,9 @@ There is a known combination of a popular browser and assistive technology that 
 ## Background
 
 - [Understanding Success Criterion 1.1.1: Non-text Content](https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html)
-- [Understanding Success Criterion 4.1.2: Name, Role, Value](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html)
 - [WCAG Technique H36: Using alt attributes on images used as submit buttons](https://www.w3.org/WAI/WCAG21/Techniques/html/H36)
+- [ARIA14: Using aria-label to provide an invisible label where a visible label cannot be used](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA14)
+- [ARIA16: Using aria-labelledby to provide a name for user interface controls](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA16)
 
 ## Test Cases
 
@@ -69,7 +67,7 @@ There is a known combination of a popular browser and assistive technology that 
 
 #### Passed Example 1
 
-The image button has an [accessible name][] through the `alt` attribute.
+This `input` element with 'type' attribute in the `Image button` state has an [accessible name][] through the `alt` attribute that describes its purpose.
 
 ```html
 <input type="image" src="/test-assets/shared/search-icon.svg" alt="Search" />
@@ -77,34 +75,34 @@ The image button has an [accessible name][] through the `alt` attribute.
 
 #### Passed Example 2
 
-The image button has an [accessible name][] through the `aria-label` attribute.
-
-```html
-<input type="image" src="/test-assets/shared/search-icon.svg" aria-label="Search" />
-```
-
-#### Passed Example 3
-
-The image button has an [accessible name][] through the `title` attribute.
+The image button has an [accessible name][] through the `title` attribute that describes its purpose.
 
 ```html
 <input type="image" src="/test-assets/shared/search-icon.svg" title="Search" />
 ```
 
-#### Passed Example 4
+#### Passed Example 3
 
-The image button has an [accessible name][] through the `aria-labelledby` attribute.
+The image button has an [accessible name][] through the `aria-label` attribute that describes its purpose.
 
 ```html
-<input type="image" src="/test-assets/shared/search-icon.svg" aria-labelledby="id1" />
-<div id="id1">Search</div>
+<input type="image" src="/test-assets/shared/local-search-icon.svg" aria-label="Search this page" />
+```
+
+#### Passed Example 4
+
+The image button has an [accessible name][] through the `aria-labelledby` attribute that describes its purpose.
+
+```html
+<h1 id="id1">Interesting buttons</h1>
+<input type="image" src="/test-assets/shared/share-icon.svg" name="Share" id="id2" aria-labelledby="id2 id1" />
 ```
 
 ### Failed
 
 #### Failed Example 1
 
-The image button element has an empty [accessible name][]. The `name` attribute can not be used to provide an [accessible name][].
+This `input` element with 'type' attribute in the `Image button` state has an empty [accessible name][], which cannot be descriptive. The `name` attribute does not provide an [accessible name][].
 
 ```html
 <input type="image" name="search" src="/test-assets/shared/search-icon.svg" />
@@ -112,15 +110,15 @@ The image button element has an empty [accessible name][]. The `name` attribute 
 
 #### Failed Example 2
 
-The image button has an empty `alt` attribute, and no other attributes that can give it an [accessible name][].
+This image button has an `alt` attribute that is not descriptive as the [accessible name][].
 
 ```html
-<input type="image" src="/test-assets/shared/search-icon.svg" alt="" />
+<input type="image" src="/test-assets/shared/search-icon.svg" alt="Share" />
 ```
 
 #### Failed Example 3
 
-The image button has an `aria-labelledby` attribute, but the referenced element does not exist. This gives the button an empty [accessible name][].
+The image button has an `aria-labelledby` attribute, but the referenced element does not exist. This gives the button an empty [accessible name][], which cannot be descriptive.
 
 ```html
 <input type="image" src="/test-assets/shared/search-icon.svg" aria-labelledby="non-existing" />
@@ -146,7 +144,7 @@ The `input` element with type with a `type` attribute in the `Button` state is n
 
 #### Inapplicable Example 3
 
-The `button` element is tested separately from the `img` element. [Success Criterion 4.1.2 Name, Role, Value](https://www.w3.org/TR/WCAG21/#name-role-value) is applied to the button, whereas the image is tested under [Success Criterion 1.1.1 Non-text Content](https://www.w3.org/TR/WCAG21/#non-text-content)
+This `button` element is separate from the `img` element.
 
 ```html
 <button><img src="/test-assets/shared/search-icon.svg" alt="Search" /></button>
@@ -154,7 +152,7 @@ The `button` element is tested separately from the `img` element. [Success Crite
 
 #### Inapplicable Example 4
 
-The `img` element is not a user interface component, and so is not tested for [Success Criterion 4.1.2 Name, Role, Value](https://www.w3.org/TR/WCAG21/#name-role-value).
+This `img` element is not button component.
 
 ```html
 <img src="/test-assets/shared/w3c-logo.png" alt="W3C logo" />
@@ -162,7 +160,7 @@ The `img` element is not a user interface component, and so is not tested for [S
 
 #### Inapplicable Example 5
 
-The image button is ignored by assistive technologies because it is not [included in the accessibility tree][]. These are not required to have an accessible name. If at some future state of the page the element gets [included in the accessibility tree][], an [accessible name][] will be necessary.
+The image button is ignored by assistive technologies because it is not [included in the accessibility tree][]. These are not required to have an accessible name.
 
 ```html
 <input type="image" src="/test-assets/shared/search-icon.svg" style="display: none;" />
