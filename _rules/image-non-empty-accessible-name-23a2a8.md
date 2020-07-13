@@ -36,7 +36,12 @@ htmlHintIgnore:
 
 ## Applicability
 
-The rule applies to HTML `img` elements and HTML elements with the [semantic role][] of `img`, except for elements that are not [included in the accessibility tree][].
+The rule applies to HTML `img` elements and HTML elements with the [semantic role][] of `img` which render an image and are [included in the accessibility tree][].
+
+HTML elements render an image if any of the following are true:
+
+- The element is an `img` element where the [current request][]'s [state][image request state] is [completely available][].
+- The element has a CSS `background-image` that does not [draw nothing](https://www.w3.org/TR/css-backgrounds-3/#the-background-image).
 
 ## Expectation
 
@@ -146,6 +151,33 @@ This `img` element inside a `div` positioned off screen has an [implicit role][]
 </div>
 ```
 
+#### Passed Example 9
+
+This `img` element displays a CSS `background-image` and has an [accessible name][] because of the `alt` attribute.
+
+```html
+<img alt="W3C logo" style="width:72px; height:48px; background-image: url(/test-assets/shared/w3c-logo.png)" />
+```
+
+#### Passed Example 10
+
+This `img` element displays a `srcset` and has an [accessible name][] because of the `alt` attribute.
+
+```html
+<img alt="W3C logo" srcset="/test-assets/shared/w3c-logo.png" />
+```
+
+#### Passed Example 11
+
+This `picture` element displays a `srcset` and has an [accessible name][] because of the `alt` attribute.
+
+```html
+<picture>
+    <source srcset="/test-assets/shared/w3c-logo.png" />
+    <img alt="W3C logo" width="72" height="48" />
+</picture>
+```
+
 ### Failed
 
 #### Failed Example 1
@@ -188,6 +220,36 @@ This `img` element has an [explicit role][] of `none`. However, it is [focusable
 <img role="none" tabindex="0" src="/test-assets/shared/w3c-logo.png" />
 ```
 
+#### Failed Example 6
+
+This `img` element displays a CSS `background-image`, has an empty [accessible name][] and an [implicit role][] of `img` because it is missing 
+an empty `alt` attribute.
+
+```html
+<img style="width:72px; height:48px; background-image: url(/test-assets/shared/w3c-logo.png)" />
+```
+
+#### Failed Example 7
+
+This `img` element displays a `srcset`, has an empty [accessible name][] and an [implicit role][] of `img` because it is missing 
+an empty `alt` attribute.
+
+```html
+<img srcset="/test-assets/shared/w3c-logo.png" />
+```
+
+#### Failed Example 8
+
+This `picture` element displays a `srcset`, has an empty [accessible name][] and an [implicit role][] of `img` because it is missing 
+an empty `alt` attribute.
+
+```html
+<picture>
+    <source srcset="/test-assets/shared/w3c-logo.png" />
+    <img width="72" height="48" />
+</picture>
+```
+
 ### Inapplicable
 
 #### Inapplicable Example 1
@@ -228,6 +290,14 @@ This element is neither an `img` element nor has a role of `img`.
 <div aria-label="W3C logo"></div>
 ```
 
+#### Inapplicable Example 5
+
+This `img` element has no `src` attribute so does not render an image.
+
+```html
+<img />
+```
+
 [accessible name]: #accessible-name 'Definition of accessible name'
 [explicit role]: #explicit-role 'Definition of explicit role'
 [focusable]: #focusable 'Definition of focusable'
@@ -235,3 +305,7 @@ This element is neither an `img` element nor has a role of `img`.
 [included in the accessibility tree]: #included-in-the-accessibility-tree 'Definition of included in the accessibility tree'
 [presentational roles conflict resolution]: https://www.w3.org/TR/wai-aria-1.1/#conflict_resolution_presentation_none 'Presentational Roles Conflict Resolution'
 [semantic role]: #semantic-role 'Definition of semantic role'
+[current request]: https://html.spec.whatwg.org/#current-request 'HTML definition of Current request, 2020/03/06'
+[image request state]: https://html.spec.whatwg.org/#img-req-state 'HTML definition of Image request state, 2020/03/06'
+[completely available]: https://html.spec.whatwg.org/#img-all 'HTML definition of Completely available, 2020/03/06'
+
