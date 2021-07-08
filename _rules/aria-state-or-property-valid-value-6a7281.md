@@ -59,7 +59,7 @@ For value type `URI`, this rule does not require that the destination URI exists
 
 #### Passed Example 1
 
-`aria-required` property with valid true/false value
+This `aria-required` attribute has a valid true/false value.
 
 ```html
 <div role="textbox" aria-required="true" aria-label="A required textbox"></div>
@@ -67,7 +67,7 @@ For value type `URI`, this rule does not require that the destination URI exists
 
 #### Passed Example 2
 
-`aria-expanded` state with valid true/false/undefined value
+This `aria-expanded` attribute has a valid true/false/undefined value.
 
 ```html
 <div role="button" aria-expanded="undefined">A button</div>
@@ -75,7 +75,7 @@ For value type `URI`, this rule does not require that the destination URI exists
 
 #### Passed Example 3
 
-`aria-pressed` state with valid tristate value
+This `aria-pressed` attribute has a valid true/false/mixed/undefined value.
 
 ```html
 <div role="button" aria-pressed="mixed">An other button</div>
